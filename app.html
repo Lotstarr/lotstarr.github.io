@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Snowboard Ride Coach</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #071522;
+      color: #f5f5f5;
+      text-align: center;
+      padding: 30px 16px;
+    }
+.nav-bar {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.nav-bar a {
+  color: #f5f5f5;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-bar a:hover {
+  text-decoration: underline;
+}
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .subheading {
+      margin-bottom: 20px;
+      color: #cfd8dc;
+      font-size: 0.95rem;
+    }
+
+    .app-container {
+      max-width: 650px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    .mode-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .mode-buttons button {
+      flex: 1;
+      max-width: 200px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background-color: #263238;
+      color: #eceff1;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .mode-buttons button.active {
+      background-color: #4fc3f7;
+      color: #071522;
+      transform: translateY(-1px);
+    }
+
+    .mode-buttons button:hover {
+      background-color: #37474f;
+    }
+
+    .panel {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: none;
+      box-sizing: border-box;
+      font-size: 0.95rem;
+    }
+
+    .action-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background-color: #4fc3f7;
+      color: #071522;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .action-btn:hover {
+      background-color: #29b6f6;
+      transform: translateY(-1px);
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 12px 14px;
+      background-color: rgba(0, 0, 0, 0.35);
+      border-radius: 10px;
+      min-height: 60px;
+      white-space: pre-line;
+    }
+
+.reset-btn {
+  background-color: #546e7a;
+  margin-left: 8px;
+}
+
+.reset-btn:hover {
+  background-color: #455a64;
+}
+
+    .small-note {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: #b0bec5;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="index.html">Home</a>
+    <a href="resume.html">Resume</a>
+    <a href="scratch.html">Snowboarding</a>
+  </div>
+
+  <h1>Snowboard Ride Coach</h1>
+  <p class="subheading">
+    Pick a mode, plug in today’s info, and get a quick plan for how to ride.
+  </p>
+
+  <div class="app-container">
+    <div class="mode-buttons">
+      <button id="conditionsMode" class="active">Conditions Coach</button>
+      <button id="tricksMode">Trick Coach</button>
+    </div>
+
+    <!-- Conditions Coach Panel -->
+    <div id="conditionsPanel" class="panel">
+      <div class="field">
+        <label for="snowInput">New snow (inches)</label>
+        <input type="number" id="snowInput" placeholder="e.g., 0, 4, 10">
+      </div>
+
+      <div class="field">
+        <label for="tempInput">Temperature (°F)</label>
+        <input type="number" id="tempInput" placeholder="e.g., 15, 25, 35">
+      </div>
+
+      <div class="field">
+        <label for="visibilityInput">Visibility</label>
+        <select id="visibilityInput">
+          <option value="good">Good</option>
+          <option value="ok">OK</option>
+          <option value="poor">Poor / foggy</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="crowdInput">Crowd level</label>
+        <select id="crowdInput">
+          <option value="empty">Pretty empty</option>
+          <option value="moderate">Moderate</option>
+          <option value="busy">Super busy</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="energyInput">Energy level</label>
+        <select id="energyInput">
+          <option value="high">High – send it</option>
+          <option value="medium">Medium – chill but down to ride</option>
+          <option value="low">Low – tired / sore</option>
+        </select>
+      </div>
+
+      <button class="action-btn" id="conditionsBtn">Get Ride Plan</button>
+      <button class="action-btn reset-btn" id="resetConditionsBtn">Reset</button>
+
+    </div>
+
+    <!-- Trick Coach Panel -->
+    <div id="tricksPanel" class="panel hidden">
+      <div class="field">
+        <label for="levelInput">Comfort level</label>
+        <select id="levelInput">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="focusInput">What do you want to work on?</label>
+        <select id="focusInput">
+          <option value="jumps">Jumps</option>
+          <option value="rails">Boxes & rails</option>
+          <option value="butters">Butters / flatground</option>
+          <option value="carving">Carving</option>
+        </select>
+      </div>
+
+      <button class="action-btn" id="tricksBtn">Get Trick Plan</button>
+      <button class="action-btn reset-btn" id="resetTricksBtn">Reset</button>
+
+    </div>
+
+    <div class="result" id="resultBox">
+      Your plan will show up here.
+    </div>
+
+    <p class="small-note">
+      This app is just a guide. Always ride within your ability, wear a helmet, and respect resort rules.
+    </p>
+  </div>
+
+  <script>
+    const conditionsModeBtn = document.getElementById("conditionsMode");
+    const tricksModeBtn = document.getElementById("tricksMode");
+    const conditionsPanel = document.getElementById("conditionsPanel");
+    const tricksPanel = document.getElementById("tricksPanel");
+    const resultBox = document.getElementById("resultBox");
+
+    const conditionsBtn = document.getElementById("conditionsBtn");
+    const tricksBtn = document.getElementById("tricksBtn");
+
+    // Inputs for conditions
+    const snowInput = document.getElementById("snowInput");
+    const tempInput = document.getElementById("tempInput");
+    const visibilityInput = document.getElementById("visibilityInput");
+    const crowdInput = document.getElementById("crowdInput");
+    const energyInput = document.getElementById("energyInput");
+
+    // Inputs for tricks
+    const levelInput = document.getElementById("levelInput");
+    const focusInput = document.getElementById("focusInput");
+
+    // Mode switching
+    conditionsModeBtn.addEventListener("click", () => {
+      conditionsModeBtn.classList.add("active");
+      tricksModeBtn.classList.remove("active");
+      conditionsPanel.classList.remove("hidden");
+      tricksPanel.classList.add("hidden");
+      resultBox.textContent = "Your plan will show up here.";
+    });
+
+    tricksModeBtn.addEventListener("click", () => {
+      tricksModeBtn.classList.add("active");
+      conditionsModeBtn.classList.remove("active");
+      tricksPanel.classList.remove("hidden");
+      conditionsPanel.classList.add("hidden");
+      resultBox.textContent = "Your plan will show up here.";
+    });
+
+    // Conditions logic
+    conditionsBtn.addEventListener("click", () => {
+      const snow = Number(snowInput.value) || 0;
+      const temp = Number(tempInput.value) || 30;
+      const vis = visibilityInput.value;
+      const crowd = crowdInput.value;
+      const energy = energyInput.value;
+
+      let headline = "";
+      let tips = [];
+
+      if (snow >= 8 && vis !== "poor" && energy !== "low") {
+        headline = "Today is a pow-tree day.";
+        tips.push("Stick to gladed runs and steeper faces where the snow stacks up.");
+        tips.push("Keep your weight centered and stay loose so you can bounce through the soft stuff.");
+      } else if (snow <= 1 && crowd === "busy") {
+        headline = "Take it easy on groomers and side hits.";
+        tips.push("Hunt for side hits and side-of-trail features to keep it fun.");
+        tips.push("Avoid the main choke points; use less popular lifts and side trails.");
+      } else if (temp <= 15 || vis === "poor") {
+        headline = "Low-vis / cold day – keep it mellow.";
+        tips.push("Ride tree-lined runs to help with visibility and wind protection.");
+        tips.push("Layer up, take more lodge breaks, and watch for ice.");
+      } else {
+        headline = "Perfect for park laps and carving.";
+        tips.push("Warm up with a few groomer laps to dial in your edges.");
+        tips.push("Then mix in mellow park features or side hits once you feel good.");
+      }
+
+      if (energy === "low") {
+        tips.push("Listen to your body. Shorter sessions beat getting hurt when you’re tired.");
+      }
+
+      resultBox.textContent = headline + "\n\n" + tips.join("\n");
+    });
+
+    // Trick plan logic
+    tricksBtn.addEventListener("click", () => {
+      const level = levelInput.value;
+      const focus = focusInput.value;
+
+      let planLines = [];
+      let safety = "Always warm up, start small, and only try tricks you feel ready for.";
+
+      if (focus === "jumps") {
+        if (level === "beginner") {
+          planLines.push("1) Warm-up: Straight airs on the tiniest rollers and side hits.");
+          planLines.push("2) Next: Small straight airs on the smallest jump, focus on a solid pop and landing.");
+          planLines.push("3) If it feels good: Add a small grab or gentle shifties.");
+        } else if (level === "intermediate") {
+          planLines.push("1) Warm-up: Clean straight airs and grabs on small jumps.");
+          planLines.push("2) Next: 180s on small/medium jumps with solid edge approaches.");
+          planLines.push("3) If ready: Work on more tweaked grabs or 3s on the smallest jump.");
+        } else {
+          planLines.push("1) Warm-up: Clean 3s and styled grabs on medium jumps.");
+          planLines.push("2) Next: Work on 5s or switch tricks on your smallest comfortable jump.");
+          planLines.push("3) If dialed: Link a small jump line with consistent speed and style.");
+        }
+      } else if (focus === "rails") {
+        if (level === "beginner") {
+          planLines.push("1) Warm-up: Ride on/off ride-ons and boxes with both feet flat.");
+          planLines.push("2) Next: Practice board slides on wide boxes, focusing on balance.");
+          planLines.push("3) If ready: Try surface swaps or small spins on/off easy features.");
+        } else if (level === "intermediate") {
+          planLines.push("1) Warm-up: Comfortable board slides and 50-50s on medium boxes.");
+          planLines.push("2) Next: 270s on/off simple rails or boxes.");
+          planLines.push("3) If dialed: Try a slightly narrower feature or a small down rail.");
+        } else {
+          planLines.push("1) Warm-up: Solid tricks on your go-to rails (270s, pretzels, etc.).");
+          planLines.push("2) Next: Work on a new technical combo on your favorite feature.");
+          planLines.push("3) If safe: Step up to a slightly gnarlier rail with a trick you already own.");
+        }
+      } else if (focus === "butters") {
+        if (level === "beginner") {
+          planLines.push("1) Warm-up: Nose and tail presses on gentle green runs.");
+          planLines.push("2) Next: Ollie/nollie into presses at slow speeds.");
+          planLines.push("3) If ready: Add small 180s in and out of butters.");
+        } else if (level === "intermediate") {
+          planLines.push("1) Warm-up: Comfortable butters on both nose and tail.");
+          planLines.push("2) Next: 180 butter combos (nose butter 180, tail butter 180).");
+          planLines.push("3) If dialed: Link butters into side hits or rollers.");
+        } else {
+          planLines.push("1) Warm-up: Switch butters and 3s out on mellow slopes.");
+          planLines.push("2) Next: Combo butters with grabs or side hits.");
+          planLines.push("3) If safe: Try more technical flatground lines down an easy run.");
+        }
+      } else if (focus === "carving") {
+        if (level === "beginner") {
+          planLines.push("1) Warm-up: Linked S-turns on an easy green, focusing on smooth edge changes.");
+          planLines.push("2) Next: Slightly deeper carves while keeping speed controlled.");
+          planLines.push("3) If ready: Practice consistent pressure through the whole turn.");
+        } else if (level === "intermediate") {
+          planLines.push("1) Warm-up: Clean carves on blue groomers.");
+          planLines.push("2) Next: Work on edge angulation and driving through your front foot.");
+          planLines.push("3) If dialed: Try some higher-speed carves with big, drawn-out turns.");
+        } else {
+          planLines.push("1) Warm-up: High-speed carves with clean edge hold.");
+          planLines.push("2) Next: Eurocarve attempts on a quiet, wide run.");
+          planLines.push("3) If safe: Mix in switch carving or carve-based lines between small features.");
+        }
+      }
+
+      resultBox.textContent = planLines.join("\n") + "\n\n" + safety;
+    });
+    // Reset buttons
+const resetConditionsBtn = document.getElementById("resetConditionsBtn");
+const resetTricksBtn = document.getElementById("resetTricksBtn");
+
+resetConditionsBtn.addEventListener("click", () => {
+  snowInput.value = "";
+  tempInput.value = "";
+  visibilityInput.value = "good";
+  crowdInput.value = "empty";
+  energyInput.value = "high";
+  resultBox.textContent = "Your plan will show up here.";
+});
+
+resetTricksBtn.addEventListener("click", () => {
+  levelInput.value = "beginner";
+  focusInput.value = "jumps";
+  resultBox.textContent = "Your plan will show up here.";
+});
+
+  </script>
+</body>
+</html>
